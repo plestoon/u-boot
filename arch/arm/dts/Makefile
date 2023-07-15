@@ -149,6 +149,7 @@ dtb-$(CONFIG_ROCKCHIP_RK3399) += \
 	rk3399-nanopc-t4.dtb \
 	rk3399-nanopi-m4.dtb \
 	rk3399-nanopi-m4-2gb.dtb \
+	rk3399-nanopi-m4v2.dtb \
 	rk3399-nanopi-m4b.dtb \
 	rk3399-nanopi-neo4.dtb \
 	rk3399-nanopi-r4s.dtb \

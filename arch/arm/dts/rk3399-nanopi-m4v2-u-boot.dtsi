@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Copyright (C) 2020 Shuying Li <libu...@qq.com>
+ */
+
+#include "rk3399-nanopi4-u-boot.dtsi"
+#include "rk3399-sdram-lpddr4-100.dtsi"

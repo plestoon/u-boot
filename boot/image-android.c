@@ -18,6 +18,16 @@
 
 static char andr_tmp_str[ANDR_BOOT_ARGS_SIZE + 1];
 
+static ulong vendor_header_size(const struct andr_vnd_boot_img_hdr *hdr) {
+	if (hdr->header_version == 3) {
+		return ALIGN(ANDR_VENDOR_BOOT_UNALIGNED_HEADER_SIZE_V3, hdr->page_size);
+	} else if (hdr->header_version == 4) {
+		return ALIGN(ANDR_VENDOR_BOOT_UNALIGNED_HEADER_SIZE_V4, hdr->page_size);
+	} else {
+		return 0;
+	}
+}
+
 static ulong checksum(const unsigned char *buffer, ulong size)
 {
 	ulong sum = 0;
@@ -102,7 +112,7 @@ static void android_vendor_boot_image_v3_v4_parse_hdr(const struct andr_vnd_boot
 	data->dtb_load_addr = hdr->dtb_addr;
 	data->bootconfig_size = hdr->bootconfig_size;
 	end = (ulong)hdr;
-	end += hdr->page_size;
+	end += vendor_header_size(hdr);
 	if (hdr->vendor_ramdisk_size) {
 		data->vendor_ramdisk_ptr = end;
 		data->vendor_ramdisk_size = hdr->vendor_ramdisk_size;
@@ -559,7 +569,7 @@ static bool android_image_get_dtb_img_addr(ulong hdr_addr, ulong vhdr_addr, ulon
 		}
 		/* Calculate the address of DTB area in boot image */
 		dtb_img_addr = vhdr_addr;
-		dtb_img_addr += v_hdr->page_size;
+		dtb_img_addr += vendor_header_size((struct andr_vnd_boot_img_hdr*)vhdr_addr);
 		if (v_hdr->vendor_ramdisk_size)
 			dtb_img_addr += ALIGN(v_hdr->vendor_ramdisk_size, v_hdr->page_size);
 		*addr = dtb_img_addr;
